@@ -5,23 +5,22 @@ import java.util.ArrayList;
 
 public class MST {
 	
-	/**
-	 * Initializes the algorithm by building single-vertex partial trees
-	 * 
-	 * @param graph Graph for which the MST is to be found
-	 * @return The initial partial tree list
-	 */
-	
-
+/**
+ * Initializes the algorithm by building single-vertex partial trees
+ * 
+ * @param graph Graph for which the MST is to be found
+ * @return The initial partial tree list
+ */
 public static PartialTreeList initialize(Graph graph) 
 {/* COMPLETE THIS METHOD */
 	
 	PartialTreeList l = new PartialTreeList();
-	Vertex[] v= graph.vertices;
+	Vertex[] v = graph.vertices;
 	PartialTree T;
 	boolean[] visited = new boolean[v.length];
 	PartialTree.Arc a = null;
 	int counter = 0;
+	
 	for(int i =0 ; i < v.length;i++)
 	{
 		Vertex.Neighbor x = v[i].neighbors;
@@ -32,14 +31,10 @@ public static PartialTreeList initialize(Graph graph)
 		
 		while(x!= null)
 		{
-		a = new PartialTree.Arc(v[i], x.vertex,x.weight);
-		//System.out.println(a);
-
-		P.insert(a);
-		P.siftDown(counter); 
-		x = x.next;
-	//	System.out.println(P.iterator().toString());
-
+			a = new PartialTree.Arc(v[i], x.vertex,x.weight);
+			P.insert(a);
+			P.siftDown(counter); 
+			x = x.next;
 		}
 		if(visited[i] == true)
 		{
@@ -65,7 +60,6 @@ public static PartialTreeList initialize(Graph graph)
 		
 		while(ptlist.size()>1)
 		{
-			
 			PartialTree PTX = ptlist.remove(); // step 3
 		
 			PartialTree.Arc PQX = null; 
@@ -78,52 +72,47 @@ public static PartialTreeList initialize(Graph graph)
 		
 			checkingV2(PTX,v1,v2,PQX,storeArc);
            
-		    PQX = PTX.getArcs().deleteMin(); // step 4
+		       PQX = PTX.getArcs().deleteMin(); // step 4
             
-		   
 			System.out.println(PQX +" "+"is a component of the MST");
 		
 			PartialTree PTY = ptlist.removeTreeContaining(PQX.v2); // finding tree through this method, passing vertex.			
             
-            PTX.merge(PTY);
-            
-            list.add(PQX);
-            
-            ptlist.append(PTX);
-            
+			    PTX.merge(PTY);
 
-		}
-	        
+			    list.add(PQX);
+
+			    ptlist.append(PTX);
+		}	 
 		return list;
 	}
 	private static void checkingV2(PartialTree PTX, Vertex v1,Vertex v2, PartialTree.Arc PQX, PartialTree.Arc storeArc)
 	{
-    while(compareMethod(v2, PTX) == true)
-    	{
-       PQX = PTX.getArcs().deleteMin();      
-    	
-       storeArc = PTX.getArcs().getMin();
-       
-       v1 = storeArc.v1;
-       
-       v2 = storeArc.v2;
-    	}
-    
+   		 while(compareMethod(v2, PTX) == true)
+    		{
+		       PQX = PTX.getArcs().deleteMin();      
+
+		       storeArc = PTX.getArcs().getMin();
+
+		       v1 = storeArc.v1;
+
+		       v2 = storeArc.v2;
+    		}
 	}
 	private static boolean compareMethod(Vertex v2, PartialTree PTX)
 	{
-        while(v2 != null)
-        {
-            if(PTX.getRoot() == v2)
-            {
-                return true;
-            }
-            if(v2.equals(v2.parent))
-            {
-                return false;
-            }
-            v2 = v2.parent;
-        }
+      		 while(v2 != null)
+      		  {
+		    if(PTX.getRoot() == v2)
+		    {
+			return true;
+		    }
+		    if(v2.equals(v2.parent))
+		    {
+			return false;
+		    }
+		    v2 = v2.parent;
+        	}
         return false;
     }
 }
