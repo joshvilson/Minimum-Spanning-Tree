@@ -48,76 +48,81 @@ public static PartialTreeList initialize(Graph graph)
 		return l;
 	
 }
-	/**
-	 * Executes the algorithm on a graph, starting with the initial partial tree list
-	 * 
-	 * @param ptlist Initial partial tree list
-	 * @return Array list of all arcs that are in the MST - sequence of arcs is irrelevant
-	 */
-	public static ArrayList<PartialTree.Arc> execute(PartialTreeList ptlist) 
-	{/* COMPLETE THIS METHOD */
-		ArrayList<PartialTree.Arc> list = new ArrayList();	
-		
-		while(ptlist.size()>1)
-		{
-			PartialTree PTX = ptlist.remove(); // step 3
-		
-			PartialTree.Arc PQX = null; 
-			
-			PartialTree.Arc storeArc = PTX.getArcs().getMin();
-			
-			Vertex v1 = storeArc.v1;
-			
-			Vertex v2 = storeArc.v2;
-		
-			checkingV2(PTX,v1,v2,PQX,storeArc);
-           
-		       PQX = PTX.getArcs().deleteMin(); // step 4
-            
-			System.out.println(PQX +" "+"is a component of the MST");
-		
-			PartialTree PTY = ptlist.removeTreeContaining(PQX.v2); // finding tree through this method, passing vertex.			
-            
-			    PTX.merge(PTY);
+/**
+ * Executes the algorithm on a graph, starting with the initial partial tree list
+ * 
+ * @param ptlist Initial partial tree list
+ * @return Array list of all arcs that are in the MST - sequence of arcs is irrelevant
+ */
+public static ArrayList<PartialTree.Arc> execute(PartialTreeList ptlist) 
+{/* COMPLETE THIS METHOD */
+	ArrayList<PartialTree.Arc> list = new ArrayList();	
 
-			    list.add(PQX);
-
-			    ptlist.append(PTX);
-		}	 
-		return list;
-	}
-	private static void checkingV2(PartialTree PTX, Vertex v1,Vertex v2, PartialTree.Arc PQX, PartialTree.Arc storeArc)
+	while(ptlist.size()>1)
 	{
-   		 while(compareMethod(v2, PTX) == true)
-    		{
-		       PQX = PTX.getArcs().deleteMin();      
+		PartialTree PTX = ptlist.remove(); // step 3
 
-		       storeArc = PTX.getArcs().getMin();
+		PartialTree.Arc PQX = null; 
 
-		       v1 = storeArc.v1;
+		PartialTree.Arc storeArc = PTX.getArcs().getMin();
 
-		       v2 = storeArc.v2;
-    		}
-	}
-	private static boolean compareMethod(Vertex v2, PartialTree PTX)
+		Vertex v1 = storeArc.v1;
+
+		Vertex v2 = storeArc.v2;
+
+		checkingV2(PTX,v1,v2,PQX,storeArc);
+
+	        PQX = PTX.getArcs().deleteMin(); // step 4
+
+		System.out.println(PQX +" "+"is a component of the MST");
+
+		PartialTree PTY = ptlist.removeTreeContaining(PQX.v2); // finding tree through this method, passing vertex.			
+
+		 PTX.merge(PTY);
+
+		 list.add(PQX);
+
+		ptlist.append(PTX);
+	}	 
+	return list;
+}
+private static void checkingV2(PartialTree PTX, Vertex v1,Vertex v2, PartialTree.Arc PQX, PartialTree.Arc storeArc)
+{
+	 while(compareMethod(v2, PTX) == true)
 	{
-      		 while(v2 != null)
-      		  {
-		    if(PTX.getRoot() == v2)
-		    {
-			return true;
-		    }
-		    if(v2.equals(v2.parent))
-		    {
-			return false;
-		    }
-		    v2 = v2.parent;
-        	}
-        return false;
-    }
+	       PQX = PTX.getArcs().deleteMin();      
+
+	       storeArc = PTX.getArcs().getMin();
+
+	       v1 = storeArc.v1;
+
+	       v2 = storeArc.v2;
+	}
+}
+/*
+*Helper Method that checks if PTX's root is equal to v2 and returns true
+*until it reaches null where it returns false or if vs is equal to its 
+*parent.
+*/
+private static boolean compareMethod(Vertex v2, PartialTree PTX)
+{
+	 while(v2 != null)
+	  {
+	    if(PTX.getRoot() == v2)
+	    {
+		return true;
+	    }
+	    if(v2.equals(v2.parent))
+	    {
+		return false;
+	    }
+	    v2 = v2.parent;
+	}
+return false;
+}
 }
 
-		
-		
-	
+
+
+
 
